@@ -17,6 +17,7 @@
             android:layout_marginStart="@dimen/margin_standart"
             android:layout_marginTop="@dimen/margin_standart"
             android:layout_marginEnd="@dimen/margin_standart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
             tools:text="Очень важная запись" />
 
         <TextView
