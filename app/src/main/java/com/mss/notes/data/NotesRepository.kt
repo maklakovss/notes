@@ -39,4 +39,6 @@ object NotesRepository {
                 )
         )
     }
+
+    fun getNotes(): List<Note> = notes
 }
