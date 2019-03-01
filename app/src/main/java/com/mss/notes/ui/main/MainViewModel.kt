@@ -10,7 +10,7 @@ class MainViewModel : ViewModel() {
     private val viewStateLiveData: MutableLiveData<MainViewState> = MutableLiveData()
 
     init {
-        viewStateLiveData.value = MainViewState(NotesRepository.getNotes())
+        viewStateLiveData.value = MainViewState(NotesRepository.notes)
     }
 
     fun getState(): LiveData<MainViewState> = viewStateLiveData

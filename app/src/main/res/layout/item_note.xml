@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp">
+    android:layout_margin="@dimen/margin_half">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,16 +14,16 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/margin_standart"
+            android:layout_marginTop="@dimen/margin_standart"
+            android:layout_marginEnd="@dimen/margin_standart"
             tools:text="Очень важная запись" />
 
         <TextView
             android:id="@+id/tv_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/margin_standart"
             tools:text="Очень важный текст записи" />
 
     </LinearLayout>
