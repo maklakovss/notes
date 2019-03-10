@@ -11,15 +11,14 @@ class MainViewModel(val repository: NotesRepository = NotesRepository)
 
     private val repositoryNotes = repository.getNotes()
 
-    private val notesObserver = object : Observer<NoteResult> {
-        override fun onChanged(t: NoteResult?) {
-            if (t == null) return
-            when (t) {
+    private val notesObserver = Observer<NoteResult> {
+        if (it != null) {
+            when (it) {
                 is NoteResult.Success<*> -> {
-                    viewStateLiveData.value = MainViewState(notes = t.data as?List<Note>)
+                    viewStateLiveData.value = MainViewState(notes = it.data as?List<Note>)
                 }
                 is NoteResult.Error -> {
-                    viewStateLiveData.value = MainViewState(error = t.error)
+                    viewStateLiveData.value = MainViewState(error = it.error)
                 }
             }
         }

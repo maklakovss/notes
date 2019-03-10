@@ -15,14 +15,12 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(layoutRes)
         viewModel.getViewState().observe(
-                this,
-                object : Observer<S> {
-                    override fun onChanged(t: S?) {
-                        if (t == null) return
-                        if (t.data != null) renderData(t.data!!)
-                        if (t.error != null) renderError(t.error)
-                    }
-                }
+                this, Observer<S> {
+            if (it != null) {
+                if (it.data != null) renderData(it.data!!)
+                if (it.error != null) renderError(it.error)
+            }
+        }
         )
     }
 
