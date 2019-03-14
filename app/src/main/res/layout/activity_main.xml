@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbarMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways"
@@ -25,5 +25,17 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_note" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_standart"
+        android:layout_marginBottom="@dimen/margin_standart"
+        android:src="@drawable/ic_add_black_24dp"
+        app:fabSize="normal"
+        app:layout_anchor="@id/rv_notes"
+        app:layout_anchorGravity="bottom|end"
+        app:layout_behavior=".ui.common.FABBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.mss.notes.R
 import com.mss.notes.data.entity.Note
+import com.mss.notes.ui.mappers.colorToResource
 import kotlinx.android.synthetic.main.item_note.view.*
 
-class NotesRVAdapter : RecyclerView.Adapter<NotesRVAdapter.ViewHolder>() {
+class NotesRVAdapter(private val onItemClickListener: (Note) -> Unit)
+    : RecyclerView.Adapter<NotesRVAdapter.ViewHolder>() {
 
     var notes: List<Note> = listOf()
         set(value) {
@@ -23,11 +25,14 @@ class NotesRVAdapter : RecyclerView.Adapter<NotesRVAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) = viewHolder.bind(notes[position])
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(note: Note) = with(itemView) {
             tv_title.text = note.title
             tv_text.text = note.text
-            itemView.setBackgroundColor(note.color)
+
+            val color = colorToResource(note.color)
+            itemView.setBackgroundColor(itemView.context.resources.getColor(color))
+            itemView.setOnClickListener { onItemClickListener(note) }
         }
     }
 }
