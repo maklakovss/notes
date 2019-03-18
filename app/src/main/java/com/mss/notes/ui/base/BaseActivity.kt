@@ -16,12 +16,11 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
         setContentView(layoutRes)
         viewModel.getViewState().observe(
                 this, Observer<S> {
-            if (it != null) {
-                if (it.data != null) renderData(it.data!!)
-                if (it.error != null) renderError(it.error)
+            it?.apply {
+                data?.apply { renderData(this) }
+                error?.apply { renderError(this) }
             }
-        }
-        )
+        })
     }
 
     private fun renderError(error: Throwable) {
