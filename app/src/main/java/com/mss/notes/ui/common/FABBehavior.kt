@@ -31,7 +31,6 @@ class FABBehavior(context: Context, attibuteSet: AttributeSet) : FloatingActionB
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, type)
         if (dyConsumed > 0 && child.visibility == View.VISIBLE) {
             child.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
-
                 @SuppressLint("RestrictedApi")
                 override fun onHidden(fab: FloatingActionButton) {
                     fab.visibility = View.INVISIBLE

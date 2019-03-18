@@ -4,7 +4,7 @@ import com.mss.notes.R
 import com.mss.notes.data.entity.Color
 
 fun colorToResource(color: Color): Int {
-    val res = when (color) {
+    return when (color) {
         Color.WHITE -> R.color.color_white
         Color.VIOLET -> R.color.color_violet
         Color.YELLOW -> R.color.color_yellow
@@ -13,5 +13,4 @@ fun colorToResource(color: Color): Int {
         Color.GREEN -> R.color.color_green
         Color.BLUE -> R.color.color_blue
     }
-    return res
 }
