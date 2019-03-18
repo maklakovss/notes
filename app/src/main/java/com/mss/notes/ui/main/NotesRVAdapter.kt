@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mss.notes.R
+import com.mss.notes.common.getColorInt
 import com.mss.notes.data.entity.Note
-import com.mss.notes.ui.mappers.colorToResource
 import kotlinx.android.synthetic.main.item_note.view.*
 
 class NotesRVAdapter(private val onItemClickListener: (Note) -> Unit)
@@ -30,8 +30,8 @@ class NotesRVAdapter(private val onItemClickListener: (Note) -> Unit)
             tv_title.text = note.title
             tv_text.text = note.text
 
-            val color = colorToResource(note.color)
-            itemView.setBackgroundColor(itemView.context.resources.getColor(color))
+            val color = note.color.getColorInt(itemView.context)
+            itemView.setBackgroundColor(color)
             itemView.setOnClickListener { onItemClickListener(note) }
         }
     }

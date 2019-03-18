@@ -9,9 +9,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
 import com.mss.notes.R
+import com.mss.notes.common.DATE_TIME_FORMAT
+import com.mss.notes.common.format
+import com.mss.notes.common.getColorInt
 import com.mss.notes.data.entity.Note
 import com.mss.notes.ui.base.BaseActivity
-import com.mss.notes.ui.mappers.colorToResource
 import kotlinx.android.synthetic.main.activity_note.*
 import java.util.*
 
@@ -87,10 +89,11 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
     }
 
     private fun initViews() {
-        if (note != null) {
-            et_title.setText(note?.title ?: "")
-            et_body.setText(note?.text ?: "")
-            toolbarNote.setBackgroundColor(resources.getColor(colorToResource(note!!.color)))
+        note?.run {
+            supportActionBar?.title = lastChanged.format(DATE_TIME_FORMAT)
+            et_title.setText(title ?: "")
+            et_body.setText(text ?: "")
+            toolbarNote.setBackgroundColor(color.getColorInt(this@NoteActivity))
         }
     }
 
