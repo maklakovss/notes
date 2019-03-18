@@ -15,10 +15,10 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(layoutRes)
         viewModel.getViewState().observe(
-                this, Observer<S> {
-            it?.apply {
-                data?.apply { renderData(this) }
-                error?.apply { renderError(this) }
+                this, Observer<S> { result ->
+            result?.apply {
+                data?.let { renderData(it) }
+                error?.let { renderError(it) }
             }
         })
     }
