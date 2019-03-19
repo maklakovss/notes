@@ -79,10 +79,9 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
 
         noteId?.let {
             viewModel.loadNote(it)
-        }
-
-        if (noteId != null)
+        } ?: let {
             supportActionBar?.title = getString(R.string.new_note_title)
+        }
 
         et_title.addTextChangedListener(textChangeListener)
         et_body.addTextChangedListener(textChangeListener)
