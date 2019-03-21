@@ -1,19 +1,25 @@
 package com.mss.notes.ui.base
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import com.firebase.ui.auth.AuthUI
 import com.mss.notes.R
+import com.mss.notes.data.errors.NoAuthException
 import kotlinx.android.synthetic.main.activity_main.*
+
+private const val RC_SIGN_IN = 458
 
 abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
     abstract val viewModel: BaseViewModel<T, S>
-    abstract val layoutRes: Int
+    abstract val layoutRes: Int?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layoutRes)
+        layoutRes?.let { setContentView(it) }
         viewModel.getViewState().observe(
                 this, Observer<S> { result ->
             result?.apply {
@@ -24,7 +30,32 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
     }
 
     private fun renderError(error: Throwable) {
-        if (error.message != null) showError(error.message!!)
+        when (error) {
+            is NoAuthException -> startLoginActivity()
+            else -> error.message?.let { showError(it) }
+        }
+    }
+
+    private fun startLoginActivity() {
+        val provides = listOf(
+                AuthUI.IdpConfig.EmailBuilder().build(),
+                AuthUI.IdpConfig.GoogleBuilder().build())
+
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setLogo(R.drawable.android_robot)
+                        .setTheme(R.style.LoginStyle)
+                        .setAvailableProviders(provides)
+                        .build(),
+                RC_SIGN_IN
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == RC_SIGN_IN && resultCode != Activity.RESULT_OK) {
+            finish()
+        }
     }
 
     abstract fun renderData(data: T)
