@@ -4,7 +4,7 @@ import com.mss.notes.data.NotesRepository
 import com.mss.notes.data.errors.NoAuthException
 import com.mss.notes.ui.base.BaseViewModel
 
-class SplashViewModel(private val repository: NotesRepository = NotesRepository) :
+class SplashViewModel(private val repository: NotesRepository) :
         BaseViewModel<Boolean?, SplashViewState>() {
 
     fun requestUser() {

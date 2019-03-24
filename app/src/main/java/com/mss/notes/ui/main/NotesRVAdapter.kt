@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import com.mss.notes.R
 import com.mss.notes.common.getColorInt
 import com.mss.notes.data.entity.Note
-import kotlinx.android.synthetic.main.item_note.view.*
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_note.*
 
 class NotesRVAdapter(private val onItemClickListener: (Note) -> Unit)
     : RecyclerView.Adapter<NotesRVAdapter.ViewHolder>() {
@@ -25,13 +26,13 @@ class NotesRVAdapter(private val onItemClickListener: (Note) -> Unit)
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) = viewHolder.bind(notes[position])
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(note: Note) = with(itemView) {
+    inner class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer {
+
+        fun bind(note: Note) {
             tv_title.text = note.title
             tv_text.text = note.text
 
-            val color = note.color.getColorInt(itemView.context)
-            itemView.setBackgroundColor(color)
+            itemView.setBackgroundColor(note.color.getColorInt(itemView.context))
             itemView.setOnClickListener { onItemClickListener(note) }
         }
     }
