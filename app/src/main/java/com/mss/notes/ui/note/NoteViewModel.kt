@@ -8,6 +8,9 @@ import com.mss.notes.ui.base.BaseViewModel
 class NoteViewModel(val repository: NotesRepository)
     : BaseViewModel<NoteViewState.Data, NoteViewState>() {
 
+    private val currentNote: Note?
+        get() = viewStateLiveData.value?.data?.note
+
     fun saveChanges(note: Note) {
         viewStateLiveData.value = NoteViewState(NoteViewState.Data(note = note))
     }
@@ -26,9 +29,6 @@ class NoteViewModel(val repository: NotesRepository)
             }
         }
     }
-
-    private val currentNote: Note?
-        get() = viewStateLiveData.value?.data?.note
 
     fun deleteNote() {
         currentNote?.let {

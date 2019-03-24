@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.mss.notes.R
 import com.mss.notes.common.DATE_TIME_FORMAT
 import com.mss.notes.common.format
@@ -29,11 +30,15 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
 
     private var note: Note? = null
     private var color = Color.WHITE
+    private var isLoading: Boolean = true
 
     override fun renderData(data: NoteViewState.Data) {
         if (data.isDeleted) finish()
         this.note = data.note
-        data.note?.let { color = it.color }
+        data.note?.let {
+            color = it.color
+            isLoading = false
+        }
         initViews()
     }
 
@@ -98,10 +103,16 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
             triggerSaveNote()
         }
 
-        setEditListener()
+        initViews()
     }
 
     private fun initViews() {
+        if (isLoading) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            progressBar.visibility = View.GONE
+        }
+
         note?.run {
             supportActionBar?.title = lastChanged.format(DATE_TIME_FORMAT)
             toolbarNote.setBackgroundColor(color.getColorInt(this@NoteActivity))
