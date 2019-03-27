@@ -38,26 +38,32 @@ class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val db: 
 
     override fun saveNote(note: Note): LiveData<Result> =
             MutableLiveData<Result>().apply {
-                getUserNotesCollection().document(note.id)
-                        .set(note)
-                        .addOnSuccessListener {
-                            Log.d(TAG, "Note $note is saved")
-                            value = Result.Success(note)
-                        }
-                        .addOnFailureListener {
-                            Log.d(TAG, "Error saving note $note, message:${it.message}")
-                            value = Result.Error(it)
-                        }
+                try {
+                    getUserNotesCollection().document(note.id)
+                            .set(note)
+                            .addOnSuccessListener {
+                                value = Result.Success(note)
+                            }
+                            .addOnFailureListener {
+                                Log.d(TAG, "Error saving note $note, message:${it.message}")
+                                throw it
+                            }
+                } catch (e: Throwable) {
+                    value = Result.Error(e)
+                }
             }
 
     override fun subscribeToAllNotes(): LiveData<Result> =
             MutableLiveData<Result>().apply {
-                getUserNotesCollection().addSnapshotListener { querySnapshot, exception ->
-                    value = exception?.let {
-                        Result.Error(exception)
-                    } ?: querySnapshot?.let {
-                        Result.Success(it.documents.map { it.toObject(Note::class.java) })
+                try {
+                    getUserNotesCollection().addSnapshotListener { querySnapshot, exception ->
+                        value = exception?.let { Result.Error(exception) }
+                                ?: querySnapshot?.let {
+                                    Result.Success(it.documents.map { it.toObject(Note::class.java) })
+                                }
                     }
+                } catch (e: Throwable) {
+                    value = Result.Error(e)
                 }
             }
 

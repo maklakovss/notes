@@ -5,7 +5,7 @@ import com.mss.notes.data.entity.Note
 import com.mss.notes.data.entity.Result
 import com.mss.notes.ui.base.BaseViewModel
 
-class NoteViewModel(val repository: NotesRepository)
+open class NoteViewModel(val repository: NotesRepository)
     : BaseViewModel<NoteViewState.Data, NoteViewState>() {
 
     private val currentNote: Note?

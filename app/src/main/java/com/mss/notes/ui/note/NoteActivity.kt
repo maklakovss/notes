@@ -59,7 +59,6 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
         override fun afterTextChanged(p0: Editable?) {
             triggerSaveNote()
         }
-
     }
 
     private fun triggerSaveNote() {

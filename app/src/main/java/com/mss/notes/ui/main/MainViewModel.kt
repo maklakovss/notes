@@ -1,6 +1,7 @@
 package com.mss.notes.ui.main
 
 import android.arch.lifecycle.Observer
+import android.support.annotation.VisibleForTesting
 import com.mss.notes.data.NotesRepository
 import com.mss.notes.data.entity.Note
 import com.mss.notes.data.entity.Result
@@ -29,7 +30,8 @@ class MainViewModel(val repository: NotesRepository)
         repositoryNotes.observeForever(notesObserver)
     }
 
-    override fun onCleared() {
+    @VisibleForTesting
+    public override fun onCleared() {
         repositoryNotes.removeObserver(notesObserver)
     }
 }
