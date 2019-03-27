@@ -1,10 +1,15 @@
-package com.mss.notes.ui.mappers
+package com.mss.notes.common
 
+import android.content.Context
+import android.support.v4.content.ContextCompat
 import com.mss.notes.R
 import com.mss.notes.data.entity.Color
 
-fun colorToResource(color: Color): Int {
-    return when (color) {
+fun Color.getColorInt(context: Context) =
+        ContextCompat.getColor(context, getColorRes())
+
+fun Color.getColorRes(): Int {
+    return when (this) {
         Color.WHITE -> R.color.color_white
         Color.VIOLET -> R.color.color_violet
         Color.YELLOW -> R.color.color_yellow
