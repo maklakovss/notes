@@ -1,19 +1,19 @@
 package com.mss.notes.data.provider
 
-import android.arch.lifecycle.LiveData
 import com.mss.notes.data.entity.Note
 import com.mss.notes.data.entity.Result
 import com.mss.notes.data.entity.User
+import kotlinx.coroutines.channels.ReceiveChannel
 
 interface RemoteDataProvider {
 
-    fun subscribeToAllNotes(): LiveData<Result>
+    fun subscribeToAllNotes(): ReceiveChannel<Result>
 
-    fun getNoteById(id: String): LiveData<Result>
+    suspend fun getNoteById(id: String): Note
 
-    fun saveNote(note: Note): LiveData<Result>
+    suspend fun saveNote(note: Note): Note
 
-    fun getCurrentUser(): LiveData<User?>
+    suspend fun getCurrentUser(): User?
 
-    fun deleteNode(noteId: String): LiveData<Result>
+    suspend fun deleteNode(noteId: String)
 }

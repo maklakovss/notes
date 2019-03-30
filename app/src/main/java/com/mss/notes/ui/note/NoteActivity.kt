@@ -2,7 +2,6 @@ package com.mss.notes.ui.note
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
@@ -16,6 +15,8 @@ import com.mss.notes.data.entity.Color
 import com.mss.notes.data.entity.Note
 import com.mss.notes.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_note.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -23,7 +24,7 @@ import java.util.*
 
 private const val SAVE_DELAY = 2000L
 
-class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
+class NoteActivity : BaseActivity<NoteData>() {
 
     override val model: NoteViewModel by viewModel()
     override val layoutRes: Int = R.layout.activity_note
@@ -32,7 +33,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
     private var color = Color.WHITE
     private var isLoading: Boolean = true
 
-    override fun renderData(data: NoteViewState.Data) {
+    override fun renderData(data: NoteData) {
         if (data.isDeleted) finish()
         this.note = data.note
         data.note?.let {
@@ -64,15 +65,16 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
     private fun triggerSaveNote() {
         if (et_title.text == null || et_title.text!!.length < 3) return
 
-        Handler().postDelayed({
+        launch {
+            delay(SAVE_DELAY)
+
             note = note?.copy(title = et_title.text.toString(),
                     text = et_body.text.toString(),
                     lastChanged = Date(),
                     color = color)
                     ?: createNewNote()
             note?.let { model.saveChanges(it) }
-
-        }, SAVE_DELAY)
+        }
     }
 
     private fun setToolbarColor(color: Color) {

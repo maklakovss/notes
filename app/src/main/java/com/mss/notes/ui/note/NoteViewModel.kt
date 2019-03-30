@@ -2,45 +2,42 @@ package com.mss.notes.ui.note
 
 import com.mss.notes.data.NotesRepository
 import com.mss.notes.data.entity.Note
-import com.mss.notes.data.entity.Result
 import com.mss.notes.ui.base.BaseViewModel
+import kotlinx.coroutines.launch
 
 open class NoteViewModel(val repository: NotesRepository)
-    : BaseViewModel<NoteViewState.Data, NoteViewState>() {
+    : BaseViewModel<NoteData>() {
 
     private val currentNote: Note?
-        get() = viewStateLiveData.value?.data?.note
+        get() = getViewState().poll()?.note
 
     fun saveChanges(note: Note) {
-        viewStateLiveData.value = NoteViewState(NoteViewState.Data(note = note))
+        setData(NoteData(note = note))
     }
 
     override fun onCleared() {
-        currentNote?.let { repository.saveNote(it) }
-    }
-
-    fun loadNote(noteId: String) {
-        repository.getNoteById(noteId).observeForever { t ->
-            t?.let {
-                viewStateLiveData.value = when (t) {
-                    is Result.Success<*> -> NoteViewState(NoteViewState.Data(note = t.data as? Note))
-                    is Result.Error -> NoteViewState(error = t.error)
-                }
-            }
+        launch {
+            currentNote?.let { repository.saveNote(it) }
+            super.onCleared()
         }
     }
 
-    fun deleteNote() {
-        currentNote?.let {
-            repository.deleteNote(it.id).observeForever { t ->
-                t?.let {
-                    viewStateLiveData.value = when (it) {
-                        is Result.Success<*> -> NoteViewState(NoteViewState.Data(isDeleted = true))
-                        is Result.Error -> NoteViewState(error = it.error)
-                    }
-                }
+    fun loadNote(noteId: String) = launch {
+        try {
+            repository.getNoteById(noteId).let {
+                setData(NoteData(note = it))
             }
+        } catch (e: Throwable) {
+            setError(e)
         }
+    }
 
+    fun deleteNote() = launch {
+        try {
+            currentNote?.let { repository.deleteNote(it.id) }
+            setData(NoteData(isDeleted = true))
+        } catch (e: Throwable) {
+            setError(e)
+        }
     }
 }
