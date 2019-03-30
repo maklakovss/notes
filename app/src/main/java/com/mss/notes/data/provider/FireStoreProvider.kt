@@ -56,11 +56,15 @@ class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val db: 
                 var registration: ListenerRegistration? = null
                 try {
                     registration = getUserNotesCollection().addSnapshotListener { querySnapshot, exception ->
-                        val value = exception?.let { Result.Error(exception) }
+                        val value = exception?.let {
+                            Result.Error(exception)
+                        }
                                 ?: querySnapshot?.let {
                                     Result.Success(it.documents.map { it.toObject(Note::class.java) })
                                 }
-                        value?.let { offer(it) }
+                        value?.let {
+                            offer(it)
+                        }
                     }
                 } catch (e: Throwable) {
                     offer(Result.Error(e))
